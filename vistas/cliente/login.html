@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - TechNova</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="neumorphic-body d-flex align-items-center min-vh-100">
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6 col-lg-5">
+        <div class="neumorphic-card p-5 animate-sequence">
+          <h3 class="text-center mb-4 neumorphic-title animate__animated animate__fadeInDown">TechNova</h3>
+
+          <!-- Mensaje según cómo llegó el usuario -->
+          <div class="text-center mb-4">
+            <h5 id="page-title">Iniciar Sesión</h5>
+            <p id="page-subtitle" class="text-muted small"></p>
+          </div>
+
+          <!-- Formulario de Iniciar Sesión (siempre visible) -->
+          <form id="loginForm">
+            <div class="mb-4">
+              <input type="email" id="loginEmail" class="neumorphic-input w-100" placeholder="Email" required>
+            </div>
+            <div class="mb-4">
+              <input type="password" id="loginPassword" class="neumorphic-input w-100" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="neumorphic-btn w-100 mb-4 animate__animated animate__bounceIn">Iniciar Sesión</button>
+          </form>
+
+          <!-- Formulario de Registro SOLO para clientes (se oculta para admin) -->
+          <div id="registro-section">
+            <hr class="my-4">
+
+            <form id="registroForm">
+              <h5 class="mb-3 animate__animated animate__fadeInRight">Crear Cuenta (Cliente)</h5>
+              <div class="mb-4">
+                <input type="text" id="regNombre" class="neumorphic-input w-100" placeholder="Nombre completo" required>
+              </div>
+              <div class="mb-4">
+                <input type="email" id="regEmail" class="neumorphic-input w-100" placeholder="Email" required>
+              </div>
+              <div class="mb-4">
+                <input type="password" id="regPassword" class="neumorphic-input w-100" placeholder="Contraseña" required>
+              </div>
+              <button type="submit" class="neumorphic-btn w-100 animate__animated animate__bounceIn">Registrarse</button>
+            </form>
+          </div>
+
+          <div class="text-center mt-4 animate__animated animate__fadeInUp">
+            <a href="/" class="text-muted">← Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Detectar si viene del botón de admin
+    const urlParams = new URLSearchParams(window.location.search);
+    const from = urlParams.get('from');
+
+    const isAdminPath = from === 'admin';
+
+    if (isAdminPath) {
+      // Solo para admin: ocultar registro y cambiar título
+      document.getElementById('registro-section').style.display = 'none';
+      document.getElementById('page-title').textContent = 'Iniciar Sesión (Admin)';
+      document.getElementById('page-subtitle').textContent = 'Solo administradores pueden acceder aquí';
+    } else {
+      // Para clientes: mostrar ambos
+      document.getElementById('page-title').textContent = 'Iniciar Sesión / Registrarse';
+      document.getElementById('page-subtitle').textContent = 'Accede o crea tu cuenta de cliente';
+    }
+
+    // Activar animaciones
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.animate-sequence')?.classList.add('loaded');
+    });
+
+    // Login (igual para todos)
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          localStorage.setItem('token', data.token);
+          alert('¡Sesión iniciada!');
+          if (data.rol === 'admin') {
+            window.location.href = '/vistas/admin/dashboard.html';
+          } else {
+            window.location.href = '/vistas/cliente/catalogo.html';
+          }
+        } else {
+          alert(data.mensaje || 'Credenciales incorrectas');
+        }
+      } catch (err) {
+        alert('Error de conexión');
+      }
+    });
+
+    // Registro (solo clientes)
+    document.getElementById('registroForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('regNombre').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const res = await fetch('/api/auth/registrar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, email, password }) // sin rol → default cliente
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          localStorage.setItem('token', data.token);
+          alert('¡Cuenta creada! Inicia sesión.');
+          window.location.href = '/vistas/cliente/catalogo.html';
+        } else {
+          alert(data.mensaje || 'Error al registrarse');
+        }
+      } catch (err) {
+        alert('Error de conexión');
+      }
+    });
+  </script>
+</body>
+</html>

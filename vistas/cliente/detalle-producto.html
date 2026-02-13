@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle de Producto - TechNova</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="neumorphic-body">
+
+  <nav class="navbar neumorphic-nav">
+    <div class="container">
+      <a class="navbar-brand" href="/">TechNova</a>
+      <a class="nav-link" href="/vistas/cliente/catalogo.html">Catálogo</a>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <div class="row g-5">
+      <div class="col-lg-6">
+        <div class="neumorphic-card">
+          <img id="producto-imagen" class="product-image img-fluid" src="" alt="">
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <h1 id="producto-nombre" class="neumorphic-title display-5 mb-3"></h1>
+        <p id="producto-precio" class="price neumorphic-price fs-3"></p>
+        <p id="producto-stock" class="stock-badge"></p>
+
+        <p id="producto-descripcion" class="lead mt-4"></p>
+
+        <ul class="specs-list list-unstyled mt-4">
+          <li><strong>Marca:</strong> <span id="producto-marca"></span></li>
+          <li><strong>Modelo:</strong> <span id="producto-modelo"></span></li>
+          <li><strong>RAM:</strong> <span id="producto-ram">No especificado</span></li>
+          <li><strong>Almacenamiento:</strong> <span id="producto-almacenamiento">No especificado</span></li>
+          <li><strong>Procesador:</strong> <span id="producto-procesador">No especificado</span></li>
+        </ul>
+
+        <button id="add-to-cart" class="neumorphic-btn btn-lg w-100 mt-4">Agregar al Carrito</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    fetch(`/api/cliente/producto/${id}`)
+      .then(res => res.json())
+      .then(p => {
+        document.getElementById('producto-nombre').textContent = p.nombre;
+        document.getElementById('producto-precio').textContent = `$${p.precio.toLocaleString()}`;
+        document.getElementById('producto-descripcion').textContent = p.descripcion || 'Sin descripción';
+        document.getElementById('producto-stock').textContent = p.stock > 0 ? `En stock (${p.stock})` : 'Agotado';
+        document.getElementById('producto-imagen').src = p.imagen || 'https://via.placeholder.com/600x400/222/444?text=Sin+Imagen';
+
+        document.getElementById('producto-marca').textContent = p.marca || 'No especificado';
+        document.getElementById('producto-modelo').textContent = p.modelo || 'No especificado';
+        document.getElementById('producto-ram').textContent = p.ram || 'No especificado';
+        document.getElementById('producto-almacenamiento').textContent = p.almacenamiento || 'No especificado';
+        document.getElementById('producto-procesador').textContent = p.procesador || 'No especificado';
+      })
+      .catch(() => {
+        alert('Producto no encontrado');
+        window.location.href = '/vistas/cliente/catalogo.html';
+      });
+
+    document.getElementById('add-to-cart').addEventListener('click', () => {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      alert('¡Producto agregado al carrito!');
+    });
+  </script>
+</body>
+</html>
