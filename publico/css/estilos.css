@@ -1,0 +1,192 @@
+/* ==================================================
+   NEUMORPHISM + FUTURISTA RESPONSIVO - MEJORADO 2025
+   ================================================== */
+
+:root {
+  --bg-main: #0a001f;
+  --bg-card: #14142a;
+  --text-primary: #e0f7ff;
+  --text-secondary: #b0e0ff;
+  --neon-cyan: #00eaff;
+  --neon-green: #39ff14;
+  --neon-magenta: #ff00e1;
+  --shadow-dark: #0b0b1a;
+  --shadow-light: #1d1d3a;
+  --glow-cyan: 0 0 20px rgba(0, 234, 255, 0.7);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  background-image: radial-gradient(circle at 15% 20%, rgba(0, 234, 255, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 85% 80%, rgba(57, 255, 20, 0.03) 0%, transparent 50%);
+}
+
+/* Fondo animado sutil */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(57, 255, 20, 0.02));
+  animation: subtlePulse 20s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes subtlePulse {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}
+
+/* Contenedor principal responsivo */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Título principal con animación especial (efecto escritura + pulso neón) */
+.neumorphic-title {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 20px var(--glow-cyan);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: titleReveal 3s steps(30, end) forwards, pulseGlow 2s infinite alternate;
+}
+
+@keyframes titleReveal {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes pulseGlow {
+  from { text-shadow: 0 0 10px var(--glow-cyan); }
+  to { text-shadow: 0 0 30px var(--glow-cyan), 0 0 50px rgba(57, 255, 20, 0.3); }
+}
+
+/* Tarjetas neumórficas responsivas */
+.neumorphic-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  box-shadow: 10px 10px 20px var(--shadow-dark),
+              -10px -10px 20px var(--shadow-light);
+  padding: 2rem;
+  transition: all 0.4s ease;
+  margin-bottom: 2rem;
+}
+
+.neumorphic-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 15px 15px 30px var(--shadow-dark),
+              -15px -15px 30px var(--shadow-light),
+              0 0 40px rgba(0, 234, 255, 0.5);
+}
+
+/* Botones neumórficos con hover mejorado */
+.neumorphic-btn {
+  background: linear-gradient(145deg, #1a0033, #2a0047);
+  border: none;
+  border-radius: 50px;
+  color: var(--neon-cyan);
+  font-weight: bold;
+  padding: 1rem 2rem;
+  box-shadow: 6px 6px 12px var(--shadow-dark),
+              -6px -6px 12px var(--shadow-light);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+}
+
+.neumorphic-btn:hover {
+  background: linear-gradient(145deg, #2a0047, #3a005b);
+  color: var(--neon-green);
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light),
+              0 0 30px rgba(57, 255, 20, 0.6);
+  transform: translateY(-4px) scale(1.04);
+}
+
+/* Botón outline (Ver Catálogo) */
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.btn-outline:hover {
+  background: rgba(0, 234, 255, 0.1);
+  color: var(--neon-green);
+  border-color: var(--neon-green);
+  transform: scale(1.05);
+}
+
+/* Inputs (Email y Contraseña) - mantengo tu animación y diseño original mejorado */
+.neumorphic-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-radius: 16px;
+  color: var(--text-primary);
+  padding: 1.2rem 1.5rem;
+  font-size: 1.1rem;
+  box-shadow: inset 5px 5px 10px var(--shadow-dark),
+              inset -5px -5px 10px var(--shadow-light);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.neumorphic-input:focus {
+  outline: none;
+  box-shadow: inset 5px 5px 10px var(--shadow-dark),
+              inset -5px -5px 10px var(--shadow-light),
+              0 0 0 4px rgba(0, 234, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Texto pequeño más visible */
+.text-muted {
+  color: #b0e0ff !important;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Responsividad completa */
+@media (max-width: 992px) {
+  .container { padding: 1.5rem 1rem; }
+  h1 { font-size: 2.8rem; }
+  .lead { font-size: 1.2rem; }
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.2rem; }
+  .lead { font-size: 1.1rem; }
+  .row.justify-content-center { flex-direction: column; }
+  .col-md-5 { width: 100%; margin-bottom: 2rem; }
+  .neumorphic-btn { padding: 1.2rem; font-size: 1.2rem; }
+}
+
+/* Animación de carga secuencial */
+.animate-sequence > * {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-sequence.loaded > * {
+  opacity: 1;
+  transform: translateY(0);
+}
